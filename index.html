@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Galería de Fotos</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#111;
+    color:white;
+    margin:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+.galeria{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
+}
+
+.tarjeta{
+    background:#222;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 10px rgba(0,0,0,.4);
+}
+
+.tarjeta img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+.contenido{
+    padding:15px;
+}
+
+.contenido h3{
+    margin-top:0;
+}
+</style>
+
+</head>
+<body>
+
+<h1>Galería de Fotos</h1>
+
+<div id="galeria" class="galeria"></div>
+
+<script>
+
+const URL_CSV = "AQUI_TU_URL_CSV";
+
+async function cargarFotos(){
+
+    const respuesta = await fetch(URL_CSV);
+    const texto = await respuesta.text();
+
+    const filas = texto.trim().split("\n");
+
+    const galeria = document.getElementById("galeria");
+
+    galeria.innerHTML = "";
+
+    filas.slice(1).forEach(fila => {
+
+        const columnas = fila.split(",");
+
+        const titulo = columnas[0];
+        const imagen = columnas[1];
+        const descripcion = columnas[2];
+
+        galeria.innerHTML += `
+            <div class="tarjeta">
+                <img src="${imagen}" alt="${titulo}">
+                <div class="contenido">
+                    <h3>${titulo}</h3>
+                    <p>${descripcion}</p>
+                </div>
+            </div>
+        `;
+    });
+}
+
+cargarFotos();
+
+</script>
+
+</body>
+</html>
